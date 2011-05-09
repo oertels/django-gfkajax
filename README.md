@@ -48,3 +48,9 @@ To do so, just add a "gfk_render()" method to your model, like:
         def gfk_render(self):
             return u'%s&nbsp;<img src="myimage.jpg" />&nbsp;' % self.mytitle
     
+# Todo
+
+* Related objects must be removable
+* Make translatable
+* Add example project
+

@@ -1,3 +1,7 @@
+# About
+
+"gfkajax" = "Generic Foreign Keys with Ajax". Inspired by [django-genericadmin](http://code.google.com/p/django-genericadmin/) (which does not work here, unfortunately).
+
 # Installation
 
 Install gfkajax and add gfkajax to INSTALLED_APPS. 
@@ -32,3 +36,12 @@ You may pass gfkajax a whitelist containing allowed content types, in format "ap
         [..]
         
         
+# Advanced usage
+
+You can tell gfkajax how to render selected objects. This is useful, if you offer e.g. images or videos as generic relations.
+
+To do so, just add a "gfk_render()" method to your model, like:
+
+    def gfk_render(self):
+        return u'%s&nbsp;<img src="myimage.jpg" width="80"/>&nbsp;' % self.mytitle
+    

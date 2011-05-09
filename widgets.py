@@ -38,13 +38,12 @@ class GfkCtWidget(forms.TextInput):
 
     def render(self, name, value, attrs=None):
 
-        orig_html = super(GfkCtWidget, self).render(name, value, attrs)
+        ret = super(GfkCtWidget, self).render(name, value, attrs)
 
         self.name = name
         self.value = value
         self.attrs = attrs
 
-        ret = orig_html
         # First, add filtered droplist-list containing content type to output
         ctypes = ContentType.objects.all()
         options = ['<option value="">-- select --</option>']
@@ -63,13 +62,13 @@ class GfkCtWidget(forms.TextInput):
             ))
         options_str = '    \n'.join(options)
 
+        # Append Content-Type selectbox
         ret += u'<select class="gfk_widget_%(name)s" size="1" id="gfk_%(name)s">%(options)s</select>' % ({
             'name': name,
             'options': options_str
         })
 
         # Append lookup-button
-
         ret += u'<a href="%s" id="%s" onclick="return showRelatedObjectLookupPopup(this);"><img src="%simg/admin/selector-search.gif" style="margin-left:4px;" width="16" height="16"></a>' % (
             '#',
             'lookup_id_%s' % name,
@@ -81,6 +80,7 @@ class GfkCtWidget(forms.TextInput):
             name,
         )
 
+        # Append widget js-code
         ret += '<script type="text/javascript">%s</script>' % self._get_js_code()
         return mark_safe(ret)
 

@@ -6,6 +6,10 @@ from django.utils.translation import ugettext_lazy as _
 from gfkajax.widgets import GfkCtWidget, GfkFkWidget
 
 def make_GfkAjaxForm(whitelist=None):
+    """
+    Form factory, needed because we have to pass the whitelist to
+    the widget.
+    """
     class GfkAjaxForm(forms.ModelForm):
 
         def __init__(self, *args, **kwargs):

@@ -41,7 +41,10 @@ You may pass gfkajax a whitelist containing allowed content types, in format "ap
 You can tell gfkajax how to render selected objects. This is useful, if you offer e.g. images or videos as generic relations.
 
 To do so, just add a "gfk_render()" method to your model, like:
-
-    def gfk_render(self):
-        return u'%s&nbsp;<img src="myimage.jpg" width="80"/>&nbsp;' % self.mytitle
+ 
+ 
+ 
+    calss MyModel(models.Model):
+        def gfk_render(self):
+            return u'%s&nbsp;<img src="myimage.jpg" />&nbsp;' % self.mytitle
     

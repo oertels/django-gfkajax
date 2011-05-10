@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django import forms
 from django.conf import settings
 from django.contrib.contenttypes.generic import GenericForeignKey
@@ -16,7 +17,8 @@ def make_GfkAjaxForm(whitelist=None):
             super(GfkAjaxForm, self).__init__(*args, **kwargs)
             obj = getattr(self, 'instance', None)
 
-            ATTRS_HIDDEN = {'class': 'hidden'}
+
+            ATTRS_HIDDEN = {'class': 'gfkhidden'}
 
             gfk_fields = []
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.conf import settings
 from django import forms
 from django.template import loader, Context
@@ -8,7 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 class GfkCtWidget(forms.TextInput):
 
     def __init__(self, *args, **kwargs):
-        self.whitelist = kwargs.pop('whitelist', '')
+        self.whitelist = kwargs.pop('whitelist', [])
 
         super(GfkCtWidget, self).__init__(*args, **kwargs)
 
@@ -32,9 +33,9 @@ class GfkCtWidget(forms.TextInput):
 
         if hasattr(model_class._meta, 'verbose_name') \
             and model_class._meta.verbose_name != '':
-                return unicode(model_class._meta.verbose_name)
+                return model_class._meta.verbose_name
         else:
-            return content_type.name
+            return unicode(content_type.name)
 
     def render(self, name, value, attrs=None):
 
@@ -47,19 +48,22 @@ class GfkCtWidget(forms.TextInput):
         # First, add filtered droplist-list containing content type to output
         ctypes = ContentType.objects.all()
         options = ['<option value="">-- select --</option>']
+
         for c in ctypes:
             if self.whitelist and \
                 not '%s.%s' % (c.app_label, c.model) in self.whitelist:
                     continue
-                
+
             sel = u''
             if c.pk == value:
                 sel = u' selected'
-            options.append('<option %s value="%s">%s</option>' % (
-                sel,
-                ('%s_%s_%s' % (c.pk, c.app_label, c.model_class().__name__)).lower(), # Build id-string: id_appname_modelname
-                self._get_ct_verbose_name(c)
-            ))
+
+            if hasattr(c, 'model_class') and c.model_class() is not None:
+                options.append(u'<option %s value="%s">%s</option>' % (
+                    sel,
+                    (u'%s_%s_%s' % (c.pk, c.app_label, c.model_class().__name__.decode('utf-8'))).lower(), # Build id-string: id_appname_modelname
+                    self._get_ct_verbose_name(c)
+                ))
         options_str = '    \n'.join(options)
 
         # Append Content-Type selectbox
@@ -67,6 +71,7 @@ class GfkCtWidget(forms.TextInput):
             'name': name,
             'options': options_str
         })
+
 
         # Append lookup-button
         ret += u'<a href="%s" id="%s" onclick="return showRelatedObjectLookupPopup(this);"><img src="%simg/admin/selector-search.gif" style="margin-left:4px;" width="16" height="16"></a>' % (

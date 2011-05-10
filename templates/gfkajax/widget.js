@@ -4,7 +4,9 @@ var GFK_{{ name }} = {
 
     init: function() {
         // Hide original fields, and complete rows
-        $(".form-row:has(.hidden)").hide();
+        $(".form-row:has(.gfkhidden)").hide();
+        $(".column").has(".gfkhidden").hide(); // For grappelli
+        $(".column").has(".gfkhidden").prev().hide(); // For grappelli
         $("#id_{{ name }}").hide();
 
         // Correct lookup node id

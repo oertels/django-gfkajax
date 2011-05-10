@@ -41,13 +41,25 @@ You may pass gfkajax a whitelist containing allowed content types, in format "ap
 You can tell gfkajax how to render selected objects. This is useful, if you offer e.g. images or videos as generic relations.
 
 To do so, just add a "gfk_render()" method to your model, like:
- 
- 
- 
-    calss MyModel(models.Model):
+
+    class MyModel(models.Model):
         def gfk_render(self):
             return u'%s&nbsp;<img src="myimage.jpg" />&nbsp;' % self.mytitle
-    
+
+
+If your form needs additional fields, you can pass them as.. "additional_fields":
+
+        form = make_GfkAjaxForm(
+            whitelist = [
+                'myapp.mymodel_lowercased'
+                'myappsecondapp.mysecondmodel_lowercased',
+            ],
+            additional_fields=[
+                'my_field': AutoCompleteSelectMultipleField('foo', required=False)
+            ],
+        )
+        [..]
+
 # Todo
 
 * Related objects must be removable

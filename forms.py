@@ -6,7 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 from gfkajax.widgets import GfkCtWidget, GfkFkWidget
 
-def make_GfkAjaxForm(whitelist=None):
+def make_GfkAjaxForm(whitelist=None, additional_fields=None):
     """
     Form factory, needed because we have to pass the whitelist to
     the widget.
@@ -15,6 +15,13 @@ def make_GfkAjaxForm(whitelist=None):
 
         def __init__(self, *args, **kwargs):
             super(GfkAjaxForm, self).__init__(*args, **kwargs)
+
+            # If additional fields needed on form generation, they can
+            # be passed. Example: http://code.google.com/p/django-ajax-selects/
+            # (see bottom of example section)
+            if additional_fields:
+                self.fields.update(additional_fields)
+
             obj = getattr(self, 'instance', None)
 
 

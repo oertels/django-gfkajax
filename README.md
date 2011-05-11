@@ -1,6 +1,6 @@
 # About
 
-"gfkajax" = "Generic Foreign Keys with Ajax". Inspired by [django-genericadmin](http://code.google.com/p/django-genericadmin/) (which does not work here, unfortunately).
+"gfkajax" = "Generic Foreign Keys with Ajax". Inspired by [django-genericadmin](http://code.google.com/p/django-genericadmin/) (which does not work here, unfortunately). It converts the inconvenient generic key selection widget into a neat ajax-driven tool.
 
 # Installation
 

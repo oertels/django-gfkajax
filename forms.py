@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import uuid
 from django import forms
 from django.conf import settings
 from django.contrib.contenttypes.generic import GenericForeignKey
@@ -13,6 +14,8 @@ def make_GfkAjaxForm(whitelist=None, additional_fields=None):
     """
     class GfkAjaxForm(forms.ModelForm):
 
+        form_counter = 0
+
         def __init__(self, *args, **kwargs):
             super(GfkAjaxForm, self).__init__(*args, **kwargs)
 
@@ -23,9 +26,6 @@ def make_GfkAjaxForm(whitelist=None, additional_fields=None):
                 self.fields.update(additional_fields)
 
             obj = getattr(self, 'instance', None)
-
-
-            ATTRS_HIDDEN = {'class': 'gfkhidden'}
 
             gfk_fields = []
 
@@ -51,16 +51,22 @@ def make_GfkAjaxForm(whitelist=None, additional_fields=None):
 
             self.gfk_fields = gfk_fields
 
+            # Generate unique id for this form
+            GfkAjaxForm.form_counter += 1
+            unique_form_id = 'form_%s' % GfkAjaxForm.form_counter
+
             # Now replace widgets
             for field in gfk_fields:
 
                 self.fields[field['ct_field']['name']].widget = GfkCtWidget(
-                    whitelist=whitelist
+                    whitelist=whitelist,
+                    unique_form_id = unique_form_id
                 )
+
                 self.fields[field['ct_field']['name']].label = field['verbose_name']
 
                 self.fields[field['fk_field']['name']].widget = GfkFkWidget(
-                    attrs=ATTRS_HIDDEN,
+                    unique_form_id = unique_form_id,
                     append_input_name = u'%s_value' % field['ct_field']['name'],
                     append_input_value = field['fk_field']['name'],
                 )

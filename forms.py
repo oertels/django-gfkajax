@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 import uuid
+import string
 from django import forms
 from django.conf import settings
 from django.contrib.contenttypes.generic import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
+from random import choice
 from gfkajax.widgets import GfkCtWidget, GfkFkWidget
 
 def make_GfkAjaxForm(whitelist=None, additional_fields=None):
@@ -13,8 +15,6 @@ def make_GfkAjaxForm(whitelist=None, additional_fields=None):
     the widget.
     """
     class GfkAjaxForm(forms.ModelForm):
-
-        form_counter = 0
 
         def __init__(self, *args, **kwargs):
             super(GfkAjaxForm, self).__init__(*args, **kwargs)
@@ -51,9 +51,9 @@ def make_GfkAjaxForm(whitelist=None, additional_fields=None):
 
             self.gfk_fields = gfk_fields
 
-            # Generate unique id for this form
-            GfkAjaxForm.form_counter += 1
-            unique_form_id = 'form_%s' % GfkAjaxForm.form_counter
+            # Generate pseudo-unique id for this form
+            rnd = ''.join([choice(string.letters[:26]) for a in range(8)])
+            unique_form_id = 'form_%s' % rnd
 
             # Now replace widgets
             for field in gfk_fields:

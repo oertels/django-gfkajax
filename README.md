@@ -44,10 +44,23 @@ To do so, just add a "gfk_render()" method to your model, like:
  
  
  
-    calss MyModel(models.Model):
+    class MyModel(models.Model):
         def gfk_render(self):
             return u'%s&nbsp;<img src="myimage.jpg" />&nbsp;' % self.mytitle
-    
+
+If your form needs additional fields, you can pass them as.. "additional_fields":
+
+        form = make_GfkAjaxForm(
+            whitelist = [
+                'myapp.mymodel_lowercased'
+                'myappsecondapp.mysecondmodel_lowercased',
+            ],
+            additional_fields=[
+                'my_field': AutoCompleteSelectMultipleField('foo', required=False)
+            ],
+        )
+        [..]
+
 # Todo
 
 * Related objects must be removable
